@@ -2,79 +2,149 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GROUP CHAT</title>
   <style>
     html, body {
       height: 100%;
       margin: 0;
-      background: white;
+      background: black;
       font-family: Arial, sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    #messages {
-      flex-grow: 1;
-      padding: 10px;
-      overflow-y: auto;
-    }
-    .message {
-      background: #d1e7ff;
-      padding: 8px;
-      margin: 5px;
-      border-radius: 5px;
-      max-width: 75%;
-    }
-    #form {
-      display: flex;
-      padding: 10px;
-      background: #f0f0f0;
-    }
-    #input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-    }
-    #sendBtn {
-      padding: 10px 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      margin-left: 10px;
-      font-size: 16px;
-    }
-    #sendBtn:hover {
-      background: #0056b3;
-    }
+
+    /* Password Modal Styling */
     #passwordModal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: black;
-      color: cyan;
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      font-size: 20px;
     }
-    #passwordModal input {
+
+    .passwordBox {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px cyan;
+      color: cyan;
+      width: 80%;
+      max-width: 350px;
+    }
+
+    .passwordBox div {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .passwordBox input {
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      width: 100%;
+      color: red;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .passwordBox button {
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: orange;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    .passwordBox button:hover {
+      background-color: yellow;
+    }
+
+    /* Chat Box Styling */
+    .chatContainer {
+      display: none;
+      flex-direction: column;
+      background: #222;
+      color: white;
+      width: 90%;
+      max-width: 500px;
+      height: 90%;
+      border-radius: 20px;
+      box-shadow: 0 0 20px cyan;
+      overflow: hidden;
+    }
+
+    #messages {
+      flex-grow: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      background: #d1e7ff;
+      color: black;
       padding: 10px;
-      margin: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      max-width: 80%;
       font-size: 16px;
+      word-wrap: break-word;
+    }
+
+    #form {
+      display: flex;
+      padding: 10px;
+      background: #333;
+    }
+
+    #input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #sendBtn {
+      padding: 10px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      margin-left: 8px;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+
+    #sendBtn:hover {
+      background: #0056b3;
     }
   </style>
 </head>
 <body>
+
+  <!-- Password Entry Modal -->
   <div id="passwordModal">
-    <div>ENTER CHAT PASSWORD</div>
-    <input type="password" id="roomPassword" placeholder="Chat Password" />
-    <button onclick="joinRoom()">JOIN CHAT</button>
+    <div class="passwordBox">
+      <div>ENTER CHAT PASSWORD</div>
+      <input type="password" id="roomPassword" placeholder="Chat Password" />
+      <button onclick="joinRoom()">JOIN CHAT</button>
+    </div>
   </div>
 
-  <div id="messages" style="display:none;"></div>
-  <form id="form" style="display:none;">
-    <input id="input" autocomplete="off" placeholder="Type your message..." />
-    <button id="sendBtn">SEND</button>
-  </form>
+  <!-- Chat Box -->
+  <div class="chatContainer" id="chatBox">
+    <div id="messages"></div>
+    <form id="form">
+      <input id="input" autocomplete="off" placeholder="Type your message..." />
+      <button id="sendBtn">SEND</button>
+    </form>
+  </div>
 
   <audio id="clickSound" src="https://github.com/Niranjan164/COMPILER/raw/main/click-151673_073339.mp3"></audio>
 
@@ -86,6 +156,7 @@
     const form = document.getElementById("form");
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
+    const chatBox = document.getElementById("chatBox");
     const clickSound = document.getElementById("clickSound");
 
     function playClick() {
@@ -102,8 +173,7 @@
       socket.emit("join room", roomPassword);
 
       document.getElementById("passwordModal").style.display = "none";
-      form.style.display = "flex";
-      messages.style.display = "block";
+      chatBox.style.display = "flex";
     }
 
     form.addEventListener("submit", (e) => {
