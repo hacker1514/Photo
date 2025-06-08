@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WELCOME TO NIRANJAN CREATIONS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+    body, html {
+      height: 100%;
+      background: black;
+      color: orange;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    #splash {
+      font-size: 24px;
+    }
+    #editorPage {
+      display: none;
+      flex-direction: column;
+      padding: 10px;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+    }
+    textarea {
+      width: 100%;
+      height: 18vh;
+      margin-bottom: 5px;
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      border: 2px solid #444;
+      resize: vertical;
+      font-size: 16px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      background: orange;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      color: black;
+      border-radius: 5px;
+      box-shadow: 0 0 5px orange;
+    }
+    #backButton {
+      margin-top: 5px;
+      background: red;
+      color: white;
+    }
+    #musicToggle {
+      background: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="splash"><h1>WELCOME TO NIRANJAN<br>CREATIONS</h1></div>
+
+  <div id="editorPage">
+    <div class="buttons">
+      <button onclick="runCode()">RUN</button>
+      <button onclick="saveCode()">SAVE</button>
+      <button id="musicToggle" onclick="toggleMusic()">MUSIC ON</button>
+    </div>
+    <textarea id="htmlCode" placeholder="HTML CODE..."></textarea>
+    <textarea id="cssCode" placeholder="CSS CODE..."></textarea>
+    <textarea id="jsCode" placeholder="JS CODE..."></textarea>
+    <button id="backButton" onclick="location.reload()">BACK</button>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="clickSound" src="https://github.com/Niranjan164/COMPILER/raw/main/click-151673_073339.mp3"></audio>
+  <audio id="bgMusic" loop src="https://raw.githubusercontent.com/hacker1514/Store/main/back_110812.mp3"></audio>
+
+<script>
+  const clickSound = document.getElementById("clickSound");
+  const bgMusic = document.getElementById("bgMusic");
+  const musicToggle = document.getElementById("musicToggle");
+
+  // Play click sound on button clicks
+  document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    });
+  });
+
+  // Background music toggle
+  function toggleMusic() {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicToggle.textContent = "MUSIC OFF";
+      musicToggle.style.background = "red";
+    } else {
+      bgMusic.pause();
+      musicToggle.textContent = "MUSIC ON";
+      musicToggle.style.background = "green";
+    }
+  }
+
+  // Splash screen transition
+  setTimeout(() => {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("editorPage").style.display = "flex";
+  }, 3000);
+
+  // Run code in a new full-screen window
+  function runCode() {
+    const html = document.getElementById("htmlCode").value;
+    const css = document.getElementById("cssCode").value;
+    const js = document.getElementById("jsCode").value;
+    const codeWindow = window.open("", "_blank");
+    codeWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>html, body { margin: 0; padding: 0; height: 100%; }${css}</style>
+      </head>
+      <body>${html}
+        <script>${js}<\/script>
+        <button onclick="window.close()" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background: red; color: white; font-weight: bold; border: none;">BACK</button>
+      </body>
+      </html>
+    `);
+    codeWindow.document.close();
+  }
+
+  // Save as index.html
+  function saveCode() {
+    const html = document.getElementById("htmlCode").value;
+    const css = document.getElementById("cssCode").value;
+    const js = document.getElementById("jsCode").value;
+    const fullCode = `<!DOCTYPE html>
+<html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${css}</style></head>
+<body>${html}<script>${js}<\/script></body>
+</html>`;
+    const blob = new Blob([fullCode], { type: 'text/html' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = "index.html";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+</body>
+</html>
