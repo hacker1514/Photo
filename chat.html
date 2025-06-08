@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure App</title>
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      text-transform: uppercase;
+    }
+    body {
+      background-color: black;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: cyan;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px cyan;
+      width: 320px;
+      text-align: center;
+    }
+    .active {
+      display: flex;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+    }
+    input {
+      width: 200px;
+      text-transform: none;
+    }
+    button {
+      cursor: pointer;
+      background-color: orange;
+      color: black;
+      font-weight: bold;
+      min-width: 120px;
+    }
+    button:hover {
+      background-color: yellow;
+    }
+    #mainPage {
+      background-color: blue;
+      color: white;
+      padding: 40px;
+      width: 320px;
+    }
+    #mainPage button {
+      background-color: red;
+      color: white;
+      margin: 10px auto;
+      display: block;
+      width: 200px;
+    }
+    #mainPage button:hover {
+      background-color: green;
+    }
+    #createChatPage {
+      background-color: cyan;
+      color: black;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px cyan;
+      width: 320px;
+      text-align: center;
+    }
+    #createChatPage p {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    #createChatPage button {
+      background-color: orange;
+      margin-top: 10px;
+      width: 100px;
+      color: black;
+    }
+    #createChatPage button:hover {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Register Page -->
+  <div id="registerPage" class="screen">
+    <h2>REGISTER</h2>
+    <input id="regName" placeholder="ENTER NAME" />
+    <input id="regPass" type="password" placeholder="ENTER PASSWORD" />
+    <button onclick="playClick(); registerUser()">REGISTER</button>
+  </div>
+
+  <!-- Login Page -->
+  <div id="loginPage" class="screen">
+    <h2>LOGIN</h2>
+    <input id="loginName" placeholder="ENTER NAME" />
+    <input id="loginPass" type="password" placeholder="ENTER PASSWORD" />
+    <button onclick="playClick(); loginUser()">LOGIN</button>
+  </div>
+
+  <!-- Main Page -->
+  <div id="mainPage" class="screen">
+    <h2>MAIN MENU</h2>
+    <button onclick="playClick(); openCreateChat()">CREATE CHAT</button>
+    <button onclick="playClick(); openJoinChat()">JOIN CHAT</button>
+    <button onclick="playClick(); closeWindow()">CLOSE</button>
+  </div>
+
+  <!-- Create Chat Password Page -->
+  <div id="createChatPage" class="screen">
+    <h2>CREATE CHAT</h2>
+    <input id="chatPassword" type="password" placeholder="ENTER CHAT PASSWORD" />
+    <button onclick="playClick(); showChatInfo()">SUBMIT</button>
+    <button onclick="playClick(); backToMain()">BACK</button>
+    <p id="shareMessage" style="display:none;"></p>
+  </div>
+
+  <!-- Click Sound -->
+  <audio id="clickSound" src="https://github.com/Niranjan164/COMPILER/raw/main/click-151673_073339.mp3"></audio>
+
+  <script>
+    const regPage = document.getElementById("registerPage");
+    const loginPage = document.getElementById("loginPage");
+    const mainPage = document.getElementById("mainPage");
+    const createChatPage = document.getElementById("createChatPage");
+    const shareMessage = document.getElementById("shareMessage");
+
+    function playClick() {
+      const audio = document.getElementById("clickSound");
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function showScreen(screen) {
+      regPage.classList.remove("active");
+      loginPage.classList.remove("active");
+      mainPage.classList.remove("active");
+      createChatPage.classList.remove("active");
+      screen.classList.add("active");
+      // Reset create chat page elements when shown
+      if(screen === createChatPage){
+        document.getElementById("chatPassword").value = "";
+        shareMessage.style.display = "none";
+        shareMessage.textContent = "";
+      }
+    }
+
+    function registerUser() {
+      const name = document.getElementById("regName").value.trim();
+      const pass = document.getElementById("regPass").value.trim();
+      if (name && pass) {
+        const userData = { name, pass };
+        localStorage.setItem("c", JSON.stringify(userData));
+        alert("REGISTERED SUCCESSFULLY! PLEASE LOGIN.");
+        showScreen(loginPage);
+      } else {
+        alert("PLEASE FILL BOTH FIELDS.");
+      }
+    }
+
+    function loginUser() {
+      const name = document.getElementById("loginName").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+      const stored = localStorage.getItem("c");
+
+      if (stored) {
+        const user = JSON.parse(stored);
+        if (user.name === name && user.pass === pass) {
+          showScreen(mainPage);
+        } else {
+          alert("INVALID NAME OR PASSWORD.");
+        }
+      } else {
+        alert("NO USER FOUND. PLEASE REGISTER.");
+        showScreen(regPage);
+      }
+    }
+
+    function openCreateChat() {
+      showScreen(createChatPage);
+    }
+
+    function showChatInfo() {
+      const pass = document.getElementById("chatPassword").value.trim();
+      if (pass) {
+        shareMessage.style.display = "block";
+        shareMessage.textContent = `JOIN CHAT BY SHARING THIS PASSWORD: ${pass}`;
+      } else {
+        alert("PLEASE ENTER A PASSWORD.");
+      }
+    }
+
+    function backToMain() {
+      showScreen(mainPage);
+    }
+
+    function openJoinChat() {
+      // Opens the URL in a new tab
+      window.open("https://hacker1514.github.io/Photo/trail.html", "_blank");
+    }
+
+    function closeWindow() {
+      // Attempt to close window or alert if not allowed
+      window.close();
+      // Some browsers block window.close() if not opened by script:
+      setTimeout(() => {
+        alert("Please close the tab/window manually.");
+      }, 500);
+    }
+
+    // On Load
+    if (localStorage.getItem("c")) {
+      showScreen(loginPage);
+    } else {
+      showScreen(regPage);
+    }
+  </script>
+</body>
+</html>
