@@ -58,18 +58,18 @@
       color: blue;
     }
 
-    #f_name     { top: 4.5cm; left: 0.6cm; color: red;font-size:17px; }
-    #f_roll     { top: 5.821cm; left:2.79cm; color:blue; }
-    #f_programme{ top: 6.31cm; left:2.79cm; }
-    #f_validity { top: 6.81cm; left:2.79cm; }
-    #f_aadhaar  { top: 7.2cm; left: 1.2cm;color:black; }
+    #f_name     { top: 4.5cm; left: 0.6cm; color: red; font-size: 17px; }
+    #f_roll     { top: 5.821cm; left: 2.79cm; color: blue; }
+    #f_programme{ top: 6.31cm; left: 2.79cm; }
+    #f_validity { top: 6.81cm; left: 2.79cm; }
+    #f_aadhaar  { top: 7.2cm; left: 1.2cm; color: black; }
 
     #barcode {
       position: absolute;
-      top: 7.2cm;
+      top: 7.4cm;
       right: 2cm;
       width: 3.7cm;
-      height: 1.2cm;
+      height: 0.8cm;
     }
   </style>
 </head>
@@ -86,7 +86,7 @@
 <button onclick="generate()">GET ID CARD</button>
 <button onclick="download()">DOWNLOAD ID CARD</button>
 
-<!-- P1 ID CARD PREVIEW -->
+<!-- ID CARD PREVIEW -->
 <div id="p1">
   <img id="photo" src="">
   <div id="f_name" class="field">Name:</div>
@@ -94,7 +94,7 @@
   <div id="f_programme" class="field">Programme:</div>
   <div id="f_validity" class="field">Validity:</div>
   <div id="f_aadhaar" class="field">Aadhaar:</div>
-  <svg id="barcode"></svg>
+  <img id="barcode" />
 </div>
 
 <script>
@@ -126,20 +126,25 @@
     const validity = document.getElementById("validity").value;
     const aadhaar = document.getElementById("aadhaar").value;
 
-	  document.getElementById("f_name").innerText =name;
+    document.getElementById("f_name").innerText = name;
     document.getElementById("f_roll").innerText = roll;
-    document.getElementById("f_programme").innerText =programme;
-    document.getElementById("f_validity").innerText =validity;
-    document.getElementById("f_aadhaar").innerText =aadhaar;
+    document.getElementById("f_programme").innerText = programme;
+    document.getElementById("f_validity").innerText = validity;
+    document.getElementById("f_aadhaar").innerText = aadhaar;
 
-    JsBarcode("#barcode", roll, {
+    // Generate barcode on canvas and convert to image
+    const canvas = document.createElement("canvas");
+    JsBarcode(canvas, roll, {
       format: "CODE128",
       width: 1,
-      height: 20,
+      height: 40,
       displayValue: false,
       lineColor: "black",
       background: "transparent"
     });
+
+    const barcodeImg = document.getElementById("barcode");
+    barcodeImg.src = canvas.toDataURL("image/png");
   }
 
   // Download as JPEG
