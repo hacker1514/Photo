@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NIRANJAN CREATIONS</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      background-color: black;
+      color: cyan;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 8px;
+      margin: 5px;
+      width: 250px;
+      border-radius: 5px;
+      border: none;
+      background-color: #111;
+      color: cyan;
+    }
+
+    button {
+      background-color: limegreen;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #p1 {
+      position: relative;
+      width: 5.5cm;
+      height: 8.5cm;
+      margin: 20px auto;
+      border: 2px solid cyan;
+      overflow: hidden;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    #photo {
+      position: absolute;
+      top: 2.3cm;
+      left: 1.64cm;
+      width: 2.2cm;
+      height: 2cm;
+      object-fit: cover;
+      border: 1px solid black;
+    }
+
+    .field {
+      position: absolute;
+      font-size: 10px;
+      font-weight: bold;
+      color: blue;
+    }
+
+    #f_name     { top: 4.5cm; left: 0.6cm; color: red;font-size:17px; }
+    #f_roll     { top: 5.821cm; left:2.79cm; color:blue; }
+    #f_programme{ top: 6.31cm; left:2.79cm; }
+    #f_validity { top: 6.81cm; left:2.79cm; }
+    #f_aadhaar  { top: 7.2cm; left: 1.2cm;color:black; }
+
+    #barcode {
+      position: absolute;
+      top: 7.2cm;
+      right: 2cm;
+      width: 3.7cm;
+      height: 1.2cm;
+    }
+  </style>
+</head>
+<body>
+
+<h2>MITS STUDENT ID CARD:</h2>
+<input type="file" id="uploadPhoto"><br>
+<input type="text" id="name" placeholder="Name"><br>
+<input type="text" id="roll" placeholder="Roll Number"><br>
+<input type="text" id="programme" placeholder="Programme"><br>
+<input type="text" id="validity" placeholder="Validity Period"><br>
+<input type="text" id="aadhaar" placeholder="Aadhaar Number"><br>
+
+<button onclick="generate()">GET ID CARD</button>
+<button onclick="download()">DOWNLOAD ID CARD</button>
+
+<!-- P1 ID CARD PREVIEW -->
+<div id="p1">
+  <img id="photo" src="">
+  <div id="f_name" class="field">Name:</div>
+  <div id="f_roll" class="field">Roll:</div>
+  <div id="f_programme" class="field">Programme:</div>
+  <div id="f_validity" class="field">Validity:</div>
+  <div id="f_aadhaar" class="field">Aadhaar:</div>
+  <svg id="barcode"></svg>
+</div>
+
+<script>
+  let photoData = "";
+
+  // Load background image with CORS enabled
+  const bg = new Image();
+  bg.crossOrigin = "anonymous";
+  bg.src = "https://hacker1514.github.io./Photo/p1.png";
+  bg.onload = () => {
+    document.getElementById("p1").style.backgroundImage = `url(${bg.src})`;
+  };
+
+  // Load photo and preview
+  document.getElementById("uploadPhoto").addEventListener("change", function(e) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      photoData = reader.result;
+      document.getElementById("photo").src = photoData;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  });
+
+  // Fill in fields and barcode
+  function generate() {
+    const name = document.getElementById("name").value;
+    const roll = document.getElementById("roll").value;
+    const programme = document.getElementById("programme").value;
+    const validity = document.getElementById("validity").value;
+    const aadhaar = document.getElementById("aadhaar").value;
+
+	  document.getElementById("f_name").innerText =name;
+    document.getElementById("f_roll").innerText = roll;
+    document.getElementById("f_programme").innerText =programme;
+    document.getElementById("f_validity").innerText =validity;
+    document.getElementById("f_aadhaar").innerText =aadhaar;
+
+    JsBarcode("#barcode", roll, {
+      format: "CODE128",
+      width: 1,
+      height: 20,
+      displayValue: false,
+      lineColor: "black",
+      background: "transparent"
+    });
+  }
+
+  // Download as JPEG
+  function download() {
+    html2canvas(document.getElementById("p1"), {
+      scale: 4,
+      useCORS: true
+    }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "FRONT.jpeg";
+      link.href = canvas.toDataURL("image/jpeg");
+      link.click();
+    });
+  }
+</script>
+
+</body>
+</html>

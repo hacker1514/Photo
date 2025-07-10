@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NIRANJAN CREATIONS</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      background-color: black;
+      color: cyan;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    input, textarea, button {
+      padding: 8px;
+      margin: 5px;
+      width: 250px;
+      border-radius: 5px;
+      border: none;
+      background-color: #111;
+      color: cyan;
+    }
+
+    button {
+      background-color: limegreen;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #p1 {
+      position: relative;
+      width: 5.5cm;
+      height: 8.5cm;
+      margin: 20px auto;
+      border: 2px solid cyan;
+      overflow: hidden;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .field {
+      position: absolute;
+      font-size: 10px;
+      font-weight: bold;
+      color: black;
+      text-align: left;
+    }
+
+    #f_father     { top: 2.68cm; left: 2.62cm; }
+    #f_mother     { top: 3.1cm;  left: 2.62cm; }
+    #f_contact    { top: 3.48cm; left: 2.62cm; }
+    #f_emergency  { top: 3.81cm; left: 2.62cm; }
+    #f_blood      { top: 4.2cm;  left: 2.623cm; }
+    #f_address    { top: 4.6cm;  left: 2.623cm; width: 4.5cm; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<h2>MITS STUDENT ID CARD :</h2>
+<input type="text" id="father" placeholder="Father Name"><br>
+<input type="text" id="mother" placeholder="Mother Name"><br>
+<input type="text" id="contact" placeholder="Contact Number"><br>
+<input type="text" id="emergency" placeholder="Emergency Number"><br>
+<input type="text" id="blood" placeholder="Blood Group"><br>
+<textarea id="address" placeholder="Enter Address" rows="3" style="width:250px;"></textarea><br>
+
+<button onclick="generate()">GET ID CARD</button>
+<button onclick="download()">DOWNLOAD ID CARD</button>
+
+<div id="p1">
+  <div id="f_father" class="field">Father:</div>
+  <div id="f_mother" class="field">Mother:</div>
+  <div id="f_contact" class="field">Contact:</div>
+  <div id="f_emergency" class="field">Emergency:</div>
+  <div id="f_blood" class="field">Blood Group:</div>
+  <div id="f_address" class="field">Address:</div>
+</div>
+
+<script>
+  // Load background image
+  const bg = new Image();
+  bg.crossOrigin = "anonymous";
+  bg.src = "https://hacker1514.github.io./Photo/p2.png";
+  bg.onload = () => {
+    document.getElementById("p1").style.backgroundImage = `url(${bg.src})`;
+  };
+
+  function generate() {
+    document.getElementById("f_father").innerText =document.getElementById("father").value;
+    document.getElementById("f_mother").innerText = document.getElementById("mother").value;
+    document.getElementById("f_contact").innerText =document.getElementById("contact").value;
+    document.getElementById("f_emergency").innerText = document.getElementById("emergency").value;
+    document.getElementById("f_blood").innerText = document.getElementById("blood").value;
+    document.getElementById("f_address").innerText =document.getElementById("address").value;
+  }
+
+  function download() {
+    html2canvas(document.getElementById("p1"), {
+      scale: 4,
+      useCORS: true
+    }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "BACK.jpeg";
+      link.href = canvas.toDataURL("image/jpeg");
+      link.click();
+    });
+  }
+</script>
+
+</body>
+</html>
